@@ -1,0 +1,21 @@
+Question 8
+Give the number of medicines taken with a lozenge (TABLET;BUCCAL, SUBLINGUAL). Make sure that your query only shows the name of the drug.
+
+db.bioinf_mongo_examen.find({$or: [{method_of_admission:"TABLET;BUCCAL"}, {method_of_admission:"SUBLINGUAL"}] }, {"drug":1})
+
+Question 9
+Give the number of medicines that have side effects in more than 8% of cases. 
+
+db.bioinf_mongo_examen.find({percentage_of_side_effects: {$gt: 8}}).count()
+Answer: 399
+
+Question 10
+Give the names of the companies that produce medicines that on average  cause side effects in more than 10% of cases? Sort your results according to decreasing percentage of side effects. 
+
+db.bioinf_mongo_examen.aggregate([{$group:{_id: {company:"$company"}, percentage_of_side_effects: { $avg: "$percentage_of_side_effects" } }}, {$group:{_id:"$_id.company", gt10:{$gt:{"$percentage_of_side_effects":10}}}}] )
+
+
+Question 11
+Specify the lower and upper limits of the percentage of side effects of medicines within companies that produce more than 1 drug. 
+
+
