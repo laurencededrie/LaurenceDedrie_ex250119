@@ -1,0 +1,23 @@
+UNF   
+Projects(personnel_no, name, birthdate, lab_code, lab_name, research_code, research_description, research_supervisor)
+unnormalized form = everything in 1 table
+
+
+1NF
+each column should be atomic, a single value in every row + no repeating groups
+key: personnel_no, research_code
+Personal(personnel_no, name, birthdate, lab_code, lab_name, research_code)
+Research(research_code, research_description, research_supervisor)
+
+
+2NF
+non-key columns need to be dependent on the primary key
+key: personnel_no, , research_code, lab_code
+Personal(personnel_no, name, birthdate, lab_code, research_code)
+Lab(lab_code, lab_name)
+Research(research_code, research_description, research_supervisor)
+
+
+3NF
+All non-key columns should be directly dependent on the primary key
+=2NF
