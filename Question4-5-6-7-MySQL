@@ -1,0 +1,58 @@
+Question 4
+Give the name and length of the smallest gene in the genome.
+
+SELECT gene_name, ((seq_region_end-seq_region_start)+1) as length FROM gene ORDER BY length ASC LIMIT 1;
++-----------+--------+
+| gene_name | length |
++-----------+--------+
+| TRDD1     |      8 |
++-----------+--------+
+
+
+Question 5
+What is the name of the gene with the most transcripts? What is the number of transcripts of this gene? 
+
+SELECT gene_name, COUNT(*) as transcripts FROM gene JOIN transcript ON gene.gene_id = transcript.gene_id GROUP BY gene_name ORDER BY transcripts DESC LIMIT 1;
++-----------+-------------+
+| gene_name | transcripts |
++-----------+-------------+
+| U6        |        1329 |
++-----------+-------------+
+
+
+Question 6
+Give the name of the chromosome with the second most genes that tell something about cancer. What is the number of exons of this chromosome? (2 queries) 
+
+SELECT chromosome, count(chromosome) as number_of_genes FROM gene WHERE description LIKE '%cancer%' GROUP BY chromosome ORDER BY number_of_genes DESC LIMIT 1 OFFSET 1;
++------------+-----------------+
+| chromosome | number_of_genes |
++------------+-----------------+
+| 9          |               5 |
++------------+-----------------+
+
+SELECT chromosome, COUNT(*) from gene g JOIN transcript t ON g.gene_id=t.gene_id JOIN exon_transcript et ON et.transcript_id=t.transcript_id WHERE chromosome=9;
++------------+----------+
+| chromosome | COUNT(*) |
++------------+----------+
+| 9          |    45679 |
++------------+----------+
+
+
+Question 7
+Give the number of rows from the exon table and do the same for the exon_transcript table. Explain why there is a difference in number of rows.
+
+SELECT COUNT(*) FROM exon;
++----------+
+| COUNT(*) |
++----------+
+|   642590 |
++----------+
+
+SELECT COUNT(*) FROM exon_transcript;
++----------+
+| COUNT(*) |
++----------+
+|  1178393 |
++----------+
+
+There is a difference in rows because 1 exon can have multiple transcripts, so there are more transcripts than there are exons.
